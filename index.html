@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Wordle Solver</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -223,6 +223,7 @@
     border-radius: 4px;
     cursor: pointer;
     padding: 15px 24px;
+    touch-action: manipulation;
     transition: all 0.15s ease;
     text-transform: uppercase;
   }
@@ -263,6 +264,7 @@
     border-radius: 4px;
     cursor: pointer;
     padding: 6px 12px;
+    touch-action: manipulation;
     text-transform: uppercase;
     transition: all 0.15s;
     white-space: nowrap;
@@ -286,6 +288,7 @@
     font-size: 1.35rem;
     padding: 6px;
     opacity: 0.5;
+    touch-action: manipulation;
     transition: opacity 0.15s;
     font-family: monospace;
   }
@@ -303,6 +306,7 @@
     border-radius: 4px;
     cursor: pointer;
     user-select: none;
+    touch-action: manipulation;
     transition: all 0.15s ease;
     border: 2px solid transparent;
   }
@@ -397,6 +401,7 @@
     border: 1px solid var(--border);
     color: var(--text);
     text-transform: uppercase;
+    touch-action: manipulation;
     transition: all 0.1s;
   }
 
@@ -443,8 +448,114 @@
   }
 
   @media (max-width: 680px) {
-    .main-layout { flex-direction: column; }
-    .left-panel { min-width: unset; width: 100%; }
+    /* ── Layout: stack vertically, results on top ── */
+    body { padding: 12px 10px; }
+
+    h1 { font-size: 1.8rem; margin-bottom: 2px; }
+    .subtitle { font-size: 0.75rem; margin-bottom: 14px; }
+
+    .main-layout {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .left-panel {
+      min-width: unset;
+      width: 100%;
+      gap: 10px;
+      /* Show results panel first on mobile via order */
+      order: 2;
+    }
+
+    .right-panel {
+      width: 100%;
+      order: 1;
+      padding: 14px;
+      min-height: 120px;
+    }
+
+    /* ── Input section ── */
+    .input-section { padding: 14px; }
+
+    .section-label { font-size: 0.8rem; margin-bottom: 8px; }
+
+    /* Bigger touch target on Add button */
+    .guess-input-row { gap: 8px; margin-bottom: 8px; }
+
+    #wordInput {
+      font-size: 1.2rem; /* must stay ≥16px to prevent iOS zoom */
+      padding: 12px 10px;
+      letter-spacing: 0.25em;
+    }
+
+    .btn {
+      font-size: 1rem;
+      padding: 12px 16px;
+    }
+
+    /* ── Guess rows: bigger tap targets ── */
+    .guess-row { gap: 5px; flex-wrap: nowrap; }
+
+    .letter-cell {
+      width: 48px;
+      height: 48px;
+      font-size: 1.4rem;
+    }
+
+    .guess-row .check-btn {
+      font-size: 0.85rem;
+      padding: 8px 10px;
+      min-width: 52px;
+      text-align: center;
+    }
+
+    .guess-row .del-btn {
+      font-size: 1.2rem;
+      padding: 8px 6px;
+      min-width: 32px;
+      text-align: center;
+    }
+
+    /* ── Legend ── */
+    .legend {
+      gap: 10px;
+      font-size: 0.8rem;
+      margin-top: 10px;
+    }
+    .legend-swatch { width: 16px; height: 16px; }
+
+    /* ── Results panel ── */
+    .results-count { font-size: 0.95rem; }
+    .count-number  { font-size: 1.6rem; }
+
+    .word-chip {
+      font-size: 0.85rem;
+      padding: 5px 9px;
+    }
+
+    #wordGrid { gap: 6px; }
+
+    .empty-state { font-size: 0.9rem; padding: 14px 0; }
+    .no-match    { font-size: 0.9rem; }
+    .overflow-note { font-size: 0.75rem; }
+
+    .error-msg       { font-size: 0.85rem; }
+    .not-in-list-note { font-size: 0.75rem; }
+
+    /* ── Color settings: compact ── */
+    .color-settings-header { padding: 10px 14px; }
+    .color-settings-body   { padding: 0 14px 14px; gap: 10px; }
+    .color-row-label       { font-size: 0.85rem; }
+    .color-row-preview     { width: 36px; height: 28px; }
+    .color-picker-wrap span { font-size: 0.6rem; }
+
+    /* Reset All button inline sizing */
+    .btn-secondary { font-size: 0.85rem; padding: 8px 12px; }
+
+    /* ── Guesses header row ── */
+    div[style*="justify-content:space-between"] {
+      margin-bottom: 8px !important;
+    }
   }
 </style>
 </head>
@@ -564,7 +675,7 @@
     <div class="results-header">
       <div class="results-count">
         <span class="count-number" id="countNumber">—</span>
-        <span style="color:var(--muted);font-size:0.85rem"> words remain</span>
+        <span style="color:var(--muted);font-size:0.75em"> words remain</span>
       </div>
     </div>
     <div id="wordGrid">
