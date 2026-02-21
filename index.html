@@ -314,7 +314,7 @@
   .state-absent {
     background: var(--absent-bg);
     border-color: var(--absent-border);
-    color: var(--muted);
+    color: var(--absent);
   }
 
   .state-present {
@@ -880,8 +880,6 @@ function applyColors(colors) {
   root.style.setProperty('--correct',        s.correct.fg);
   root.style.setProperty('--correct-bg',     s.correct.bg);
   root.style.setProperty('--correct-border', s.correct.border);
-  // also update muted for absent text to match
-  root.style.setProperty('--muted', s.absent.fg);
 }
 
 function syncPickers(colors) {
