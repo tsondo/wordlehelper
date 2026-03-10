@@ -11,14 +11,14 @@
     --panel: #13161e;
     --border: #1e2330;
     --text: #e8eaf0;
-    --muted: #5a6180;
+    --muted: #8890a8;
     --correct: #4ade80;
     --correct-bg: #0d2918;
     --correct-border: #166534;
     --present: #fbbf24;
     --present-bg: #2a1f00;
     --present-border: #92400e;
-    --absent: #374151;
+    --absent: #7a8494;
     --absent-bg: #111318;
     --absent-border: #1f2433;
     --accent: #7c83f0;
@@ -795,11 +795,24 @@ function updateResults() {
   }
 
   const LIMIT = 300;
-  const show = matching.slice(0, LIMIT);
+  const truncated = matching.length > LIMIT;
+  const show = truncated ? matching.slice(0, LIMIT) : matching;
   grid.innerHTML = show.map(w =>
     `<span class="word-chip" onclick="useWord('${w}')" title="Click to use as next guess">${w.toUpperCase()}</span>`
   ).join('');
-  noteEl.textContent = matching.length > LIMIT ? `Showing ${LIMIT} of ${matching.length} matches` : '';
+
+  if (truncated) {
+    noteEl.innerHTML = `Showing ${LIMIT} of ${matching.length} matches — <a href="#" id="showAllLink" style="color:var(--accent);cursor:pointer">show all</a>`;
+    document.getElementById('showAllLink').addEventListener('click', e => {
+      e.preventDefault();
+      grid.innerHTML = matching.map(w =>
+        `<span class="word-chip" onclick="useWord('${w}')" title="Click to use as next guess">${w.toUpperCase()}</span>`
+      ).join('');
+      noteEl.textContent = `Showing all ${matching.length} matches`;
+    });
+  } else {
+    noteEl.textContent = '';
+  }
 }
 
 function useWord(w) {
@@ -851,7 +864,7 @@ document.getElementById('wordInput').addEventListener('keydown', e => {
 // ── Color customization ──────────────────────────────────────────────────────
 
 const DEFAULTS = {
-  absent:  { fg: '#5a6180', bg: '#111318', border: '#1f2433' },
+  absent:  { fg: '#7a8494', bg: '#111318', border: '#1f2433' },
   present: { fg: '#fbbf24', bg: '#2a1f00', border: '#92400e' },
   correct: { fg: '#4ade80', bg: '#0d2918', border: '#166534' }
 };
